@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lunch EXPRESS Rider</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8f1;--surface:#fff;--ink:#2a2118;--muted:#7a6b5d;--brand:#ff6b00;--on:#fff;--line:#f0e1d2;--ok:#1f8a4c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a130d;--surface:#261c14;--ink:#f6ece2;--muted:#b3a08e;--line:#3a2b1f;--ok:#4cc27d}}
+:root[data-theme="dark"]{--bg:#1a130d;--surface:#261c14;--ink:#f6ece2;--muted:#b3a08e;--line:#3a2b1f;--ok:#4cc27d}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.app{max-width:480px;margin:0 auto;padding:20px 20px 40px}
+.logo{font-weight:700;color:var(--brand)}.logo span{color:var(--ink)}
+h1{font-size:1.5rem;line-height:1.25;margin:6px 0 2px}
+.sub{color:var(--muted);font-size:.9rem}
+.prog{background:var(--brand);color:var(--on);border-radius:18px;padding:18px;margin:18px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prog b{font-size:1.8rem;display:block;line-height:1.1}.prog small{opacity:.92}
+.bar{grid-column:1/3;height:8px;border-radius:8px;background:rgba(255,255,255,.3);overflow:hidden}
+.bar i{display:block;height:100%;background:#fff;width:0;transition:width .4s}
+.chips{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto}
+.chip{font:inherit;font-size:.85rem;font-weight:500;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:50px;padding:8px 16px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on)}
+.stop{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:16px;padding:16px;margin-bottom:12px}
+.stop.picked{border-left-color:#e0a100}.stop.done{border-left-color:var(--ok);opacity:.85}
+.stop h3{font-size:1.05rem}.stop p{font-size:.9rem;color:var(--muted)}
+.row{display:flex;gap:8px;margin-top:12px}
+.btn{font:inherit;font-weight:600;border:0;border-radius:50px;padding:12px 16px;background:var(--brand);color:var(--on);cursor:pointer;flex:1;text-align:center;text-decoration:none;font-size:.95rem}
+.btn.ghost{background:transparent;color:var(--brand);border:2px solid var(--brand);flex:none}
+.btn.ok{background:var(--ok);color:#fff}
+.btn:focus-visible,.chip:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.state{font-weight:600;font-size:.85rem}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+[hidden]{display:none!important}.scan{width:100%;margin-bottom:12px;flex:none}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}.mbox{background:var(--surface);border-radius:20px;padding:18px;width:100%;max-width:420px}.mbox video{width:100%;border-radius:14px;background:#000;aspect-ratio:1/1;object-fit:cover;display:block}.smsg{font-weight:600;margin:12px 0;min-height:3em;font-size:.95rem}.mbox input{font:inherit;flex:1;min-width:0;padding:11px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}#auth input,#auth select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}#auth label{display:block;font-weight:500;font-size:.88rem;margin:14px 0 5px}#auth .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:16px}#auth .btn{margin-top:18px;width:100%;flex:none}#auth .aerr{color:#d33;font-weight:500;font-size:.88rem;min-height:1.3em;margin-top:10px}
+.ob{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-top:14px}.ob b{font-size:.95rem}.sw{position:relative;display:inline-block;width:56px;height:32px;flex:none}.sw input{opacity:0;position:absolute;inset:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}.sw i{position:absolute;inset:0;border-radius:32px;background:var(--line);transition:.2s}.sw i::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:.2s}.sw input:checked+i{background:var(--ok)}.sw input:checked+i::after{left:27px}.sw input:focus-visible+i{outline:3px solid var(--brand);outline-offset:2px}
+.loc{display:flex;gap:10px;align-items:center;margin-top:10px;font-size:.9rem;font-weight:500}.loc input{width:20px;height:20px;accent-color:var(--brand)}.tg{font-size:.78rem;color:var(--brand);font-weight:600;margin-left:6px}.map{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:14px}.map svg{width:100%;height:auto;display:block}.leg{display:flex;gap:16px;font-size:.82rem;color:var(--muted);margin:8px 4px 2px;flex-wrap:wrap}.leg i{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:6px}.rt{list-style:none;padding:0;margin:12px 0 0}.rt li{display:flex;gap:12px;padding:10px 4px;border-top:1px solid var(--line);font-size:.92rem;align-items:center}.rt b{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;color:#fff;background:var(--brand)}.rt b.d{border-radius:6px;background:var(--ok)}.rt small{color:var(--muted);display:block}.gm{margin-top:12px;display:block}.reset{background:none;border:0;color:var(--muted);font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;margin:16px auto 0;display:block}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="logo" style="display:flex;align-items:center;gap:10px"><svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#ff6b00"/><path d="M28 20c0-7 16-7 16 0" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><rect x="22" y="20" width="28" height="9" rx="4" fill="#fff"/><rect x="22" y="31" width="28" height="9" rx="4" fill="#fff" opacity=".85"/><rect x="22" y="42" width="28" height="9" rx="4" fill="#fff" opacity=".7"/><path d="M6 27h10M4 36h12M8 45h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg><div>Lunch <span>EXPRESS</span> · Rider</div></div>
+  <div id="auth" hidden>
+    <h1 id="at">Rider sign in</h1>
+    <p class="sub" id="as"></p>
+    <form id="af" class="card">
+      <div id="sf" hidden>
+        <label for="rn">Full name</label><input id="rn" autocomplete="name">
+        <label for="rvt">Vehicle</label><select id="rvt"><option>Motorbike</option><option>Scooter</option><option>Bicycle</option></select>
+        <label for="rvn">Vehicle number</label><input id="rvn" autocomplete="off" placeholder="e.g. UP53 AB 1234">
+      </div>
+      <label for="rp">Phone number</label><input id="rp" inputmode="tel" autocomplete="tel">
+      <label for="rpin">4-digit PIN</label><input id="rpin" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+      <p class="aerr" id="aerr" aria-live="polite"></p>
+      <button class="btn" id="asub">Sign in</button>
+      <button type="button" class="reset" id="aswap"></button>
+    </form>
+  </div>
+  <div id="main" hidden>
+  <h1 id="hi"></h1>
+  <p class="sub" id="date"></p>
+  <div class="ob"><div><b id="rname"></b><span class="sub" id="gpst" style="display:block">Offline</span></div><div style="display:flex;gap:12px;align-items:center"><button type="button" class="btn ghost" id="so" style="padding:7px 14px;font-size:.82rem">Sign out</button><label class="sw"><input type="checkbox" id="gps" aria-label="Go online"><i></i></label></div></div>
+  <p id="offmsg" class="empty">You are offline. Switch on to go online and see today’s route.</p>
+  <div id="shift" hidden>
+  <div class="prog">
+    <div><b id="np">0/0</b><small>Picked up</small></div>
+    <div><b id="nd">0/0</b><small>Delivered</small></div>
+    <div class="bar"><i id="bar"></i></div>
+  </div>
+  <div class="chips" id="views"><button class="chip vt" data-v="list">List</button><button class="chip vt" data-v="map">Route map</button></div>
+  <div class="chips" id="chips"></div>
+  <div id="mapbox" class="map" hidden></div>
+  <div id="list"></div>
+  <button class="reset" id="reset">Reset today’s route</button>
+  </div>
+  </div>
+</div>
+<div id="modal" class="modal" hidden><div class="mbox"><video id="vid" playsinline muted></video><p id="smsg" class="smsg" aria-live="polite"></p><button class="btn ghost" id="sclose" style="margin-top:10px;width:100%;flex:none">Close</button></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, setDoc, deleteDoc, onSnapshot, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyCdMzW6-10OrWo3f5hhLJThJNPThxak4Sc",authDomain:"lunch-express-09.firebaseapp.com",projectId:"lunch-express-09",storageBucket:"lunch-express-09.firebasestorage.app",messagingSenderId:"724032920759",appId:"1:724032920759:web:a928a79479669815b64132"};
+const app=initializeApp(firebaseConfig,"rider"),db=getFirestore(app),auth=getAuth(app);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const day=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const RIDER="Rider";
+const SCH={"St. Xavier’s School":[28.5690,77.3560],"Gyan Bharti Public School":[28.5850,77.3440]};
+let V="list";
+let D=[],F="todo",CUS=[],PAR={},ST={};
+const $=id=>document.getElementById(id);
+const save=()=>{};
+const hr=new Date().getHours();
+$("hi").textContent=(hr<12?"Good morning":hr<17?"Good afternoon":"Good evening")+", "+RIDER;
+$("date").textContent=new Date().toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long"});
+const FIL=[["todo","To pick up"],["picked","On the way"],["done","Delivered"]];
+const map=a=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(a+", Noida");
+function draw(){
+  drawMap();
+  const n=D.length,p=D.filter(x=>x.s>=1).length,d=D.filter(x=>x.s===2).length;
+  $("np").textContent=p+"/"+n;$("nd").textContent=d+"/"+n;$("bar").style.width=(n?(p+d)/(2*n)*100:0)+"%";
+  $("chips").innerHTML=FIL.map(([k,l],i)=>`<button class="chip" data-f="${k}" aria-pressed="${F===k}">${l} (${D.filter(x=>x.s===i).length})</button>`).join("");
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{F=c.dataset.f;draw()});
+  const si=FIL.findIndex(x=>x[0]===F);
+  const L=D.filter(x=>x.s===si);
+  $("list").innerHTML=L.length?L.map(x=>`<div class="stop ${["","picked","done"][x.s]}">
+   <h3>${esc(x.child)} · ${esc(x.cls)}<span class="tg">${tag(x)}</span></h3>
+   <p>${esc(x.s===0?"Pickup "+x.time+" · "+x.addr:"Deliver to "+x.school)}</p>
+   <div class="row">
+    <a class="btn ghost" href="tel:${x.phone}" aria-label="Call parent of ${x.child}">Call</a>
+    <a class="btn ghost" target="_blank" rel="noopener" href="${map(x.s===0?x.addr:x.school)}">Map</a>
+    ${x.s===0?`<button class="btn" data-id="${x.id}">Scan to pick up</button>`:x.s===1?`<button class="btn ok" data-id="${x.id}">Scan to deliver</button>`:`<span class="state" style="align-self:center;color:var(--ok)">Delivered</span>`}
+   </div></div>`).join(""):`<div class="empty">${si===0?"All tiffins picked up. Great work!":si===1?"No tiffins in your bag.":"Nothing delivered yet."}</div>`;
+  document.querySelectorAll(".stop .btn[data-id]").forEach(b=>b.onclick=()=>{openScan(+b.dataset.id)});
+}
+document.querySelectorAll(".vt").forEach(b=>b.onclick=()=>{V=b.dataset.v;draw()});
+function drawMap(){
+  $("mapbox").hidden=V!=="map";$("list").hidden=V==="map";$("chips").hidden=V==="map";
+  document.querySelectorAll(".vt").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===V));
+  if(V!=="map")return;
+  const P=D.filter(x=>x.s===0&&x.c).sort((a,b)=>a.time.localeCompare(b.time)).map(x=>({t:"p",n:x.child,sub:x.addr+" · "+x.time,c:x.c}));
+  const sc=[...new Set(D.filter(x=>x.s<2).map(x=>x.school))];
+  const Q=sc.map(s=>({t:"d",n:s,sub:D.filter(x=>x.s<2&&x.school===s).length+" tiffin(s) to drop",c:SCH[s]||[28.57,77.34]}));
+  const all=[...P,...Q];
+  if(!all.length){$("mapbox").innerHTML='<div class="empty">No stops left. All pickups and drops are done.</div>';return}
+  const W=340,H=380,m=34;
+  const la=all.map(p=>p.c[0]),lo=all.map(p=>p.c[1]);
+  const a0=Math.min(...la),a1=Math.max(...la),o0=Math.min(...lo),o1=Math.max(...lo);
+  const xy=c=>[m+(o1===o0?.5:(c[1]-o0)/(o1-o0))*(W-2*m),H-m-(a1===a0?.5:(c[0]-a0)/(a1-a0))*(H-2*m)];
+  let g="";for(let i=1;i<6;i++){g+=`<line x1="${i*W/6}" y1="0" x2="${i*W/6}" y2="${H}" stroke="var(--line)"/><line x1="0" y1="${i*H/6}" x2="${W}" y2="${i*H/6}" stroke="var(--line)"/>`}
+  const pts=all.map(p=>xy(p.c));
+  const line=`<polyline points="${pts.map(q=>q.join(",")).join(" ")}" fill="none" stroke="var(--brand)" stroke-width="3" stroke-dasharray="7 6" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const pins=all.map((p,i)=>{const [x,y]=pts[i];return p.t==="p"?`<circle cx="${x}" cy="${y}" r="13" fill="var(--brand)" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${i+1}</text>`:`<rect x="${x-13}" y="${y-13}" width="26" height="26" rx="7" fill="var(--ok)" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${i+1}</text>`}).join("");
+  const ll=c=>c[0]+","+c[1];
+  const url="https://www.google.com/maps/dir/?api=1&travelmode=driving&origin="+ll(all[0].c)+"&destination="+ll(all[all.length-1].c)+(all.length>2?"&waypoints="+all.slice(1,-1).slice(0,9).map(p=>ll(p.c)).join("%7C"):"");
+  $("mapbox").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Route map of pickups and drops">${g}${line}${pins}</svg><div class="leg"><span><i style="background:var(--brand);border-radius:50%"></i>Pickup</span><span><i style="background:var(--ok);border-radius:3px"></i>School drop</span></div><ul class="rt">${all.map((p,i)=>`<li><b class="${p.t==="d"?"d":""}">${i+1}</b><div>${esc(p.n)}<small>${esc(p.sub)}</small></div></li>`).join("")}</ul><a class="btn gm" target="_blank" rel="noopener" href="${url}">Open route in Google Maps</a>`;
+}
+function tag(x){return "LX-"+String(x.id).padStart(4,"0")}
+const GEOFENCE=true,RADIUS=100; // metres from the stop. Set GEOFENCE to false to test away from the stop.
+function dist(a,b,c,d){const R=6371000,r=Math.PI/180,x=(c-a)*r,y=(d-b)*r,h=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+let stream=null,raf=0,busy=false,want=0,mode=-1;
+function note(t,ok){const m=$("smsg");m.textContent=t;m.style.color=ok?"var(--ok)":"#d33"}
+let chk=false;
+async function handle(code){if(chk)return;chk=true;try{await handle1(code)}finally{chk=false}}
+async function handle1(code){
+  code=(code||"").trim().toUpperCase();
+  const o=D.find(x=>tag(x)===code);
+  if(!o){note("Wrong bag: "+(code||"empty code")+" is not on your route.",false);return}
+  if(want&&o.id!==want){const w=D.find(x=>x.id===want);note("Wrong bag. This stop is for "+w.child+", "+w.cls+".",false);return}
+  if(o.s!==mode){note("This bag was already scanned for this step.",false);return}
+  if(GEOFENCE){
+    const pick=o.s===0,place=pick?"pickup address":o.school,tgt=pick?o.c:SCH[o.school];
+    if(!tgt){note("The location of this stop is not set. Contact the office.",false);return}
+    note("Checking your location…",true);
+    let pos;
+    try{pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:12000,maximumAge:5000}))}
+    catch(e){note("Turn on location to confirm you are at the "+place+", then scan again.",false);return}
+    const d=dist(pos.coords.latitude,pos.coords.longitude,tgt[0],tgt[1]);
+    if(d>RADIUS){note("You are about "+Math.round(d)+" m from the "+place+". Go there and scan again.",false);return}
+    if(o.s!==mode)return;
+  }
+  if(o.s===0){o.s=1;setStatus(o.id,"Picked up");mode=-1;setTimeout(closeScan,2200);save();draw();note("Picked up: "+o.child+", "+o.cls+". Deliver to "+o.school+".",true);return}
+  if(o.s===1){o.s=2;setStatus(o.id,"Delivered");mode=-1;setTimeout(closeScan,2200);save();draw();note("Delivered: "+o.child+", "+o.cls+" at "+o.school+".",true);return}
+  note(o.child+"’s bag is already delivered.",false)
+}
+async function openScan(id){
+  want=id;mode=(D.find(x=>x.id===id)||{}).s;
+  $("modal").hidden=false;note("Scan "+(D.find(x=>x.id===id)||{child:"the"}).child+"’s bag QR.",true);
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+    const v=$("vid");v.srcObject=stream;await v.play();
+    const c=document.createElement("canvas"),g=c.getContext("2d",{willReadFrequently:true});
+    const tick=()=>{if(!stream)return;
+      if(v.readyState===4&&!busy&&window.jsQR){c.width=v.videoWidth;c.height=v.videoHeight;g.drawImage(v,0,0);
+        const im=g.getImageData(0,0,c.width,c.height),r=jsQR(im.data,im.width,im.height);
+        if(r&&r.data){busy=true;handle(r.data);setTimeout(()=>busy=false,2500)}}
+      raf=requestAnimationFrame(tick)};
+    tick();
+  }catch(e){note("Camera is not available. Allow camera access in your browser settings and try again.",false)}
+}
+function closeScan(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}cancelAnimationFrame(raf);$("modal").hidden=true}
+$("sclose").onclick=closeScan;
+
+const setStatus=(id,st)=>setDoc(doc(db,"status",String(id)),{st,stDate:day(0),rider:ME.name,t:serverTimestamp()},{merge:true}).catch(()=>note("Could not save to the office. Check your connection.",false));
+let unsubs=[],pu=null;
+function stopData(){unsubs.forEach(f=>f());unsubs=[];CUS=[];PAR={};ST={};D=[];draw()}
+function startData(){
+  stopData();const er=e=>console.error(e);
+  unsubs.push(onSnapshot(query(collection(db,"customers"),where("rider","==",ME.name)),s=>{CUS=s.docs.map(d=>d.data());rebuild()},er));
+  unsubs.push(onSnapshot(collection(db,"parents"),s=>{PAR={};s.docs.forEach(d=>PAR[d.id]=d.data());rebuild()},er));
+  unsubs.push(onSnapshot(collection(db,"status"),s=>{ST={};s.docs.forEach(d=>ST[d.id]=d.data());rebuild()},er));
+}
+function rebuild(){
+  const t=day(0);
+  D=CUS.filter(c=>c.end>=t&&!(PAR[c.id]&&PAR[c.id].skipDate===t)).map(c=>{
+    const p=PAR[c.id]||{},g=k=>p[k]||c[k]||"",v=ST[c.id]&&ST[c.id].stDate===t?ST[c.id].st:"";
+    return {id:c.id,child:g("child"),cls:g("cls"),school:g("school"),addr:g("addr"),time:p.time||c.time||"7:30 AM",phone:c.phone,s:v==="Delivered"?2:v==="Picked up"?1:0,c:p.lat!=null&&p.lng!=null?[p.lat,p.lng]:null};
+  }).sort((a,b)=>a.time.localeCompare(b.time));
+  draw();
+}
+let wid=null,lastSend=0;
+function sendLocation(p){if(!ME||Date.now()-lastSend<10000)return;lastSend=Date.now();setDoc(doc(db,"locations",ME.uid),{rider:ME.name,phone:ME.phone,lat:p.lat,lng:p.lng,t:p.t}).catch(()=>{})}
+$("gps").onchange=e=>{
+  const L=$("gpst"),off="Offline";
+  if(!e.target.checked){if(wid!==null)navigator.geolocation.clearWatch(wid);wid=null;L.textContent=off;ON=false;lastSend=0;if(ME)deleteDoc(doc(db,"locations",ME.uid)).catch(()=>{});syncOnline();return}
+  if(!navigator.geolocation){L.textContent="Location is not available on this device";e.target.checked=false;return}
+  wid=navigator.geolocation.watchPosition(pos=>{const p={rider:(ME&&ME.name)||RIDER,phone:ME&&ME.phone,lat:pos.coords.latitude,lng:pos.coords.longitude,t:Date.now()};sendLocation(p);ON=true;syncOnline();L.textContent="Online · location · updated "+new Date(p.t).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})},()=>{L.textContent="Allow location access to go online";e.target.checked=false;wid=null;ON=false;syncOnline()},{enableHighAccuracy:true,maximumAge:10000,timeout:20000});
+};
+let ME=null,ON=false,signup=false,signingUp=false;
+async function hp(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("lx:"+s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+const em=ph=>ph+"@riders.lunchexpress.app",pw=async(ph,pin)=>(await hp(ph+pin)).slice(0,32);
+function syncOnline(){$("shift").hidden=!ON;$("offmsg").hidden=ON}
+function gate(){const ok=!!ME&&!!ME.approved;$("gps").disabled=!ok;$("offmsg").textContent=ok?"You are offline. Switch on to go online and see today’s route.":"Your account is waiting for approval from the office. This page updates as soon as you are approved."}
+function authUI(){$("sf").hidden=!signup;$("at").textContent=signup?"Create rider account":"Rider sign in";$("as").textContent=signup?"Sign up once before your first shift. The office approves new riders.":"Sign in to start your shift.";$("asub").textContent=signup?"Sign up":"Sign in";$("aswap").textContent=signup?"Already have an account? Sign in":"New rider? Sign up";$("aerr").textContent=""}
+$("aswap").onclick=()=>{signup=!signup;authUI()};
+$("af").onsubmit=async e=>{e.preventDefault();
+  const err=t=>{$("aerr").textContent=t},ph=$("rp").value.replace(/\D/g,"").slice(-10),pin=$("rpin").value;
+  if(ph.length!==10)return err("Enter a 10-digit phone number.");
+  if(!/^\d{4}$/.test(pin))return err("PIN must be 4 digits.");
+  const nm=$("rn").value.trim(),vn=$("rvn").value.trim().toUpperCase();
+  if(signup){if(nm.length<2)return err("Enter your full name.");if(!vn)return err("Enter your vehicle number.")}
+  $("asub").disabled=true;
+  try{
+    const p=await pw(ph,pin);
+    if(signup){
+      signingUp=true;
+      const cr=await createUserWithEmailAndPassword(auth,em(ph),p);
+      await setDoc(doc(db,"riders",cr.user.uid),{name:nm,phone:ph,vt:$("rvt").value,vn,approved:false,created:serverTimestamp()});
+      signingUp=false;showApp({uid:cr.user.uid,name:nm,phone:ph,vn,approved:false});
+    }else await signInWithEmailAndPassword(auth,em(ph),p);
+  }catch(x){
+    signingUp=false;const c=x&&x.code||"";
+    err(c==="auth/email-already-in-use"?"This phone number is already registered. Sign in instead.":/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)?"Phone number or PIN is wrong.":c==="auth/operation-not-allowed"?"Email/Password sign-in is not enabled in Firebase yet.":"Could not continue ("+(c||"network")+"). Try again.");
+  }finally{$("asub").disabled=false}
+};
+function showApp(r){
+  ME=r;$("af").reset();$("auth").hidden=true;$("main").hidden=false;$("rname").textContent=r.name+" · "+r.vn;
+  const h=new Date().getHours();$("hi").textContent=(h<12?"Good morning":h<17?"Good afternoon":"Good evening")+", "+r.name.split(" ")[0];
+  ON=false;syncOnline();gate();
+  if(pu)pu();
+  pu=onSnapshot(doc(db,"riders",r.uid),s=>{if(!s.exists())return;const was=ME.approved;ME={...ME,...s.data()};if(ME.approved&&!was)startData();if(!ME.approved)stopData();gate()},e=>console.error(e));
+  if(r.approved)startData();
+}
+function showAuth(){if(pu){pu();pu=null}stopData();ME=null;$("auth").hidden=false;$("main").hidden=true;signup=false;authUI()}
+onAuthStateChanged(auth,async u=>{
+  if(signingUp)return;
+  if(!u){showAuth();return}
+  try{const s=await getDoc(doc(db,"riders",u.uid));
+    if(s.exists())showApp({uid:u.uid,...s.data()});else{showAuth();$("aerr").textContent="This account is not a rider account."}
+  }catch(x){showAuth();$("aerr").textContent="Could not load your profile. Check your connection."}
+});
+$("so").onclick=()=>{const g=$("gps");if(g.checked){g.checked=false;g.dispatchEvent(new Event("change"))}signOut(auth)};
+$("reset").onclick=()=>{if(!confirm("Reset today’s route?"))return;F="todo";D.forEach(x=>setDoc(doc(db,"status",String(x.id)),{st:"Not started",stDate:day(0),rider:ME.name,t:serverTimestamp()},{merge:true}).catch(()=>{}))};
+draw();
+</script>
+</body>
+</html>

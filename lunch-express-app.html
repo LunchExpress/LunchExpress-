@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lunch EXPRESS</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8f1;--surface:#fff;--ink:#2a2118;--muted:#7a6b5d;--brand:#ff6b00;--brand-ink:#fff;--line:#f0e1d2;--ok:#1f8a4c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a130d;--surface:#261c14;--ink:#f6ece2;--muted:#b3a08e;--line:#3a2b1f;--ok:#4cc27d}}
+:root[data-theme="dark"]{--bg:#1a130d;--surface:#261c14;--ink:#f6ece2;--muted:#b3a08e;--line:#3a2b1f;--ok:#4cc27d}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+header{padding:20px 20px 8px}
+.logo{font-weight:700;font-size:1.3rem;color:var(--brand)}.logo span{color:var(--ink)}
+main{flex:1;padding:8px 20px 96px}
+h2{font-size:1.5rem;line-height:1.25;margin:8px 0 4px}
+.sub{color:var(--muted);font-size:.95rem;margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+/* tracker */
+.track{position:relative;margin:8px 0 4px;padding-left:6px}
+.track::before{content:"";position:absolute;left:19px;top:14px;bottom:14px;width:3px;background:var(--line)}
+.fill{position:absolute;left:19px;top:14px;width:3px;background:var(--brand);transition:height .6s ease;height:0}
+.stage{position:relative;display:flex;gap:16px;align-items:flex-start;padding:10px 0}
+.dot{width:28px;height:28px;border-radius:50%;background:var(--surface);border:3px solid var(--line);flex:none;z-index:1;display:grid;place-items:center;font-size:13px;transition:all .4s}
+.stage.done .dot{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.stage.now .dot{border-color:var(--brand);box-shadow:0 0 0 6px color-mix(in srgb,var(--brand) 22%,transparent)}
+.stage b{display:block;font-weight:600}.stage small{color:var(--muted)}
+.stage:not(.done):not(.now) b{color:var(--muted);font-weight:500}
+.banner{background:var(--brand);color:var(--brand-ink);border-radius:18px;padding:20px;margin-bottom:16px}
+.banner h2{margin:0 0 4px}.banner p{opacity:.95;font-size:.95rem}
+.banner.paused{background:var(--muted)}
+.btn{font:inherit;font-weight:600;border:0;border-radius:50px;padding:13px 24px;background:var(--brand);color:var(--brand-ink);cursor:pointer;width:100%;font-size:1rem;text-align:center;text-decoration:none;display:block}
+.btn.ghost{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.btn:focus-visible,.tab:focus-visible,.plan:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.switch{appearance:none;width:50px;height:30px;border-radius:30px;background:var(--line);position:relative;cursor:pointer;flex:none;transition:background .2s}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .2s}
+.switch:checked{background:var(--brand)}.switch:checked::after{left:23px}
+/* plans */
+.plan{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px;cursor:pointer;position:relative}
+.plan[aria-pressed="true"]{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 8%,var(--surface))}
+.plan .p{font-size:1.4rem;font-weight:700;color:var(--brand)}.plan small{color:var(--muted)}
+.tag{position:absolute;right:14px;top:14px;background:var(--brand);color:var(--brand-ink);font-size:.75rem;font-weight:600;border-radius:20px;padding:2px 12px}
+/* forms */
+label{display:block;font-weight:500;font-size:.9rem;margin:14px 0 6px}
+input,select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.msg{color:var(--ok);font-weight:500;font-size:.9rem;min-height:1.4em;margin-top:10px;text-align:center}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav div{max-width:480px;margin:0 auto;display:flex}
+.tab{flex:1;font:inherit;font-size:.85rem;font-weight:500;background:none;border:0;padding:14px 4px;color:var(--muted);cursor:pointer;border-top:3px solid transparent}
+.tab[aria-selected="true"]{color:var(--brand);border-top-color:var(--brand);font-weight:600}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo" style="display:flex;align-items:center;gap:10px"><svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#ff6b00"/><path d="M28 20c0-7 16-7 16 0" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><rect x="22" y="20" width="28" height="9" rx="4" fill="#fff"/><rect x="22" y="31" width="28" height="9" rx="4" fill="#fff" opacity=".85"/><rect x="22" y="42" width="28" height="9" rx="4" fill="#fff" opacity=".7"/><path d="M6 27h10M4 36h12M8 45h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg><div>Lunch <span>EXPRESS</span></div></div></header>
+<main>
+
+<section id="v-today">
+  <div id="banner" class="banner"></div>
+  <div class="card">
+    <div class="track"><div class="fill" id="fill"></div><div id="stages"></div></div>
+    <button class="btn ghost" id="adv" style="margin-top:12px">Preview next step</button>
+  </div>
+  <div class="card row">
+    <div><b>Skip tomorrow’s pickup</b><br><small style="color:var(--muted)">Holiday or sick day? Turn on before 8 PM.</small></div>
+    <input type="checkbox" class="switch" id="skip" aria-label="Skip tomorrow’s pickup">
+  </div>
+</section>
+
+<section id="v-plan" hidden>
+  <h2>Choose your plan</h2>
+  <p class="sub">Every plan starts with a free trial day.</p>
+  <div id="plans"></div>
+  <label for="start">Start date</label>
+  <input type="date" id="start">
+  <div style="height:16px"></div>
+  <a class="btn" id="sub" href="#" target="_blank" rel="noopener">Subscribe on WhatsApp</a>
+  <div class="msg" id="planmsg"></div>
+</section>
+
+<section id="v-me" hidden>
+  <h2>Pickup details</h2>
+  <p class="sub">Our rider uses these every morning.</p>
+  <div class="card">
+    <label for="tagc" style="margin-top:0">Bag code</label><input id="tagc" placeholder="e.g. LX-0004" autocomplete="off">
+    <label for="pph">Your phone number</label><input id="pph" inputmode="tel" autocomplete="tel">
+    <label for="child">Child’s name</label><input id="child" autocomplete="off">
+    <label for="cls">Class and section</label><input id="cls" placeholder="e.g. 4-B">
+    <label for="school">School</label><input id="school">
+    <label for="addr">Pickup address</label><input id="addr">
+    <label for="time">Pickup time</label>
+    <select id="time"><option>7:15 AM</option><option>7:30 AM</option><option>7:45 AM</option><option>8:00 AM</option><option>8:15 AM</option></select>
+    <div style="height:12px"></div>
+    <button class="btn ghost" id="loc" type="button">Use my current location for pickup</button>
+    <div class="msg" id="locmsg"></div>
+    <div style="height:12px"></div>
+    <button class="btn" id="save">Save details</button>
+    <div class="msg" id="mymsg"></div>
+  </div>
+</section>
+
+</main>
+<nav><div role="tablist">
+  <button class="tab" role="tab" data-v="today" aria-selected="true">Today</button>
+  <button class="tab" role="tab" data-v="plan" aria-selected="false">Plan</button>
+  <button class="tab" role="tab" data-v="me" aria-selected="false">Details</button>
+</div></nav>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyCdMzW6-10OrWo3f5hhLJThJNPThxak4Sc",authDomain:"lunch-express-09.firebaseapp.com",projectId:"lunch-express-09",storageBucket:"lunch-express-09.firebasestorage.app",messagingSenderId:"724032920759",appId:"1:724032920759:web:a928a79479669815b64132"};
+const app=initializeApp(firebaseConfig,"parent"),db=getFirestore(app),auth=getAuth(app);
+const day=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const ready=new Promise(res=>{onAuthStateChanged(auth,u=>{if(u)res(u);else signInAnonymously(auth).catch(()=>res(null))})});
+const WA="919137512257";
+const PLANS=[
+ {id:"m",name:"Monthly",price:"₹699",note:"per month · good to try"},
+ {id:"q",name:"3 Months",price:"₹1,799",note:"you save ₹300",tag:"Most popular"},
+ {id:"h",name:"6 Months",price:"₹3,299",note:"best value"}];
+const STAGES=[["Tiffin packed","Waiting for you to hand it over"],["Picked up from home","Rider has your tiffin"],["On the way to school","Keeping it warm"],["Delivered to class rack","Ready before lunch"]];
+let S={child:"",cls:"",school:"",addr:"",time:"7:30 AM",plan:"q",start:"",skipDate:"",step:0,id:"",phone:"",lat:null,lng:null};
+try{const r=localStorage.getItem("lx");if(r)S={...S,...JSON.parse(r)}}catch(e){}
+const $=id=>document.getElementById(id);
+const save=()=>{try{localStorage.setItem("lx",JSON.stringify(S))}catch(e){}};
+
+function tabs(v){
+  ["today","plan","me"].forEach(k=>$("v-"+k).hidden=k!==v);
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.v===v));
+  if(location.hash.slice(1)!==v)history.replaceState(null,"","#"+v);
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>tabs(t.dataset.v));
+
+function today(){
+  const n=S.child||"your child";
+  const b=$("banner");b.className="banner"+(S.skip?"":"");
+  if(S.step===3){b.innerHTML=`<h2>${n}’s lunch is at school</h2><p>Delivered to the class rack. Enjoy!</p>`}
+  else if(S.step===0){b.innerHTML=`<h2>Pickup at ${S.time}</h2><p>Have ${n}’s tiffin ready at the door.</p>`}
+  else{b.innerHTML=`<h2>${n}’s lunch is on its way</h2><p>${STAGES[S.step][0]}.</p>`}
+  $("stages").innerHTML=STAGES.map((s,i)=>`<div class="stage ${i<S.step?"done":i===S.step?"now":""}"><div class="dot">${i<=S.step&&i<S.step?"✓":""}</div><div><b>${s[0]}</b><small>${s[1]}</small></div></div>`).join("");
+  const st=document.querySelectorAll(".stage");
+  const h=st[S.step].offsetTop+14-14;
+  $("fill").style.height=Math.max(0,h-0)+"px";
+  $("adv").textContent=S.step===3?"Restart preview":"Preview next step";
+  $("adv").hidden=!!S.id;
+  $("skip").checked=S.skipDate===day(1);
+}
+$("adv").onclick=()=>{S.step=S.step===3?0:S.step+1;save();today()};
+function pushParent(){
+  if(!S.id||!auth.currentUser)return Promise.resolve();
+  return setDoc(doc(db,"parents",S.id),{uid:auth.currentUser.uid,phone:S.phone,child:S.child,cls:S.cls,school:S.school,addr:S.addr,time:S.time,lat:S.lat,lng:S.lng,skipDate:S.skipDate||"",updated:serverTimestamp()},{merge:true});
+}
+$("skip").onchange=e=>{S.skipDate=e.target.checked?day(1):"";save();pushParent().catch(()=>{})};
+let unw=null;
+function watch(){
+  if(unw){unw();unw=null}
+  if(!S.id)return;
+  unw=onSnapshot(doc(db,"status",S.id),s=>{const d=s.data()||{},v=d.stDate===day(0)?d.st:"";S.step=v==="Delivered"?3:v==="Picked up"?2:0;today()},()=>{});
+}
+
+function plans(){
+  $("plans").innerHTML=PLANS.map(p=>`<button class="plan" data-id="${p.id}" aria-pressed="${S.plan===p.id}">${p.tag?`<span class="tag">${p.tag}</span>`:""}<b>${p.name}</b><div class="p">${p.price}</div><small>${p.note}</small></button>`).join("");
+  document.querySelectorAll(".plan").forEach(b=>b.onclick=()=>{S.plan=b.dataset.id;save();plans();link()});
+}
+function link(){
+  const p=PLANS.find(x=>x.id===S.plan);
+  const t=`Hi Lunch EXPRESS! I’d like the ${p.name} plan (${p.price}).\nChild: ${S.child||"-"} (${S.cls||"-"})\nSchool: ${S.school||"-"}\nPickup: ${S.addr||"-"} at ${S.time}\nStart date: ${S.start||"-"}`;
+  $("sub").href=`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+}
+$("start").onchange=e=>{S.start=e.target.value;save();link()};
+
+["child","cls","school","addr","time"].forEach(k=>$(k).value=S[k]);
+$("tagc").value=S.id?"LX-"+String(S.id).padStart(4,"0"):"";$("pph").value=S.phone||"";
+$("loc").onclick=()=>{
+  const m=$("locmsg");
+  if(!navigator.geolocation){m.textContent="Location is not available on this device.";return}
+  m.textContent="Finding your location…";
+  navigator.geolocation.getCurrentPosition(q=>{S.lat=+q.coords.latitude.toFixed(6);S.lng=+q.coords.longitude.toFixed(6);save();m.textContent="Location captured. Press Save details to send it to your rider."},()=>{m.textContent="Allow location access and try again."},{enableHighAccuracy:true,timeout:15000});
+};
+$("save").onclick=async()=>{
+  ["child","cls","school","addr","time"].forEach(k=>S[k]=$(k).value.trim());
+  const tag=$("tagc").value.trim().toUpperCase(),ph=$("pph").value.replace(/\D/g,"").slice(-10),m=$("mymsg"),say=t=>{m.textContent=t};
+  save();today();link();
+  if(!/^LX-\d{4}$/.test(tag)){say("Enter the bag code printed on your child’s bag, like LX-0004.");return}
+  if(ph.length!==10){say("Enter your 10-digit phone number.");return}
+  say("Saving…");
+  try{
+    await ready;
+    const id=String(parseInt(tag.slice(3),10)),st=await getDoc(doc(db,"status",id));
+    if(!st.exists()||(st.data().p4&&st.data().p4!==ph.slice(-4))){say("We could not match this bag code and phone number. Please check them or call us.");return}
+    S.id=id;S.phone=ph;save();
+    await pushParent();watch();today();
+    say("Saved. Your rider will see these details.");
+  }catch(e){say("Could not save. Check your connection and try again.")}
+  setTimeout(()=>say(""),4000);
+};
+const d=new Date();d.setDate(d.getDate()+1);
+$("start").min=d.toISOString().slice(0,10);$("start").value=S.start;
+plans();link();today();ready.then(()=>watch());
+const h=location.hash.slice(1);if(["today","plan","me"].includes(h))tabs(h);
+</script>
+</body>
+</html>
