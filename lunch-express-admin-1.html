@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lunch EXPRESS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8f1;--surface:#fff;--ink:#2a2118;--muted:#7a6b5d;--brand:#ff6b00;--on:#fff;--line:#f0e1d2;--ok:#1f8a4c;--warn:#b26a00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a130d;--surface:#261c14;--ink:#f6ece2;--muted:#b3a08e;--line:#3a2b1f;--ok:#4cc27d;--warn:#f0b34a}}
+:root[data-theme="dark"]{--bg:#1a130d;--surface:#261c14;--ink:#f6ece2;--muted:#b3a08e;--line:#3a2b1f;--ok:#4cc27d;--warn:#f0b34a}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.app{max-width:960px;margin:0 auto;padding:20px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.logo{font-weight:700;font-size:1.2rem;color:var(--brand)}.logo span{color:var(--ink)}
+.tabs{display:flex;gap:6px}
+.tab{font:inherit;font-weight:500;border:0;background:none;color:var(--muted);padding:8px 16px;border-radius:50px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--brand);color:var(--on)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.stat b{font-size:1.7rem;display:block;line-height:1.1}.stat small{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px 16px;margin-bottom:16px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th{text-align:left;font-size:.85rem;color:var(--muted);font-weight:500;padding:12px 8px;border-bottom:1px solid var(--line)}
+td{padding:12px 8px;border-bottom:1px solid var(--line);font-size:.92rem;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;font-size:.8rem;font-weight:600;border-radius:20px;padding:2px 12px;background:var(--line)}
+.pill.ok{color:var(--ok)}.pill.warn{color:var(--warn)}.pill.brand{color:var(--brand)}
+select,input{font:inherit;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
+.btn{font:inherit;font-weight:600;border:0;border-radius:50px;padding:11px 22px;background:var(--brand);color:var(--on);cursor:pointer}
+.btn.link{background:none;color:var(--muted);padding:4px 8px;font-weight:500;text-decoration:underline}
+.btn:focus-visible,.tab:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:12px 0}
+form label{font-size:.85rem;font-weight:500;display:block;margin-bottom:4px}form input,form select{width:100%}
+.h{font-size:1.1rem;margin:4px 0 10px}
+.demo{background:var(--soft,#fff0e2);border-radius:12px;padding:10px 14px;font-size:.88rem;color:var(--warn);margin-bottom:14px;font-weight:500}.rc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.rc small{color:var(--muted);display:block}.leg{display:flex;gap:18px;font-size:.85rem;color:var(--muted);margin:10px 4px 2px;flex-wrap:wrap}.leg i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+.bw{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}@media (max-width:760px){.bw{grid-template-columns:1fr}}
+.bag{position:relative;width:min(100%,340px);margin:46px auto 0;background:#ff6b00;border-radius:26px 26px 34px 34px;padding:58px 24px 28px;box-shadow:inset 0 -14px 0 rgba(0,0,0,.12)}
+.bag::before,.bag::after{content:"";position:absolute;top:-44px;width:90px;height:76px;border:11px solid #c24f00;border-bottom:0;border-radius:60px 60px 0 0}.bag::before{left:46px}.bag::after{right:46px}
+.zip{position:absolute;top:22px;left:22px;right:22px;border-top:3px dashed rgba(255,255,255,.55)}
+.btag{background:#fff;color:#2a2118;border-radius:18px;padding:18px 16px 0;text-align:center;overflow:hidden}
+.btag .bb{display:flex;justify-content:center;align-items:center;gap:8px;font-weight:700;color:#ff6b00}.btag .bb span{color:#2a2118}
+.bkid{font-size:1.9rem;font-weight:700;line-height:1.1;margin:14px 0 4px;overflow-wrap:anywhere}
+.bqr{width:140px;height:140px;margin:14px auto 4px}.bqr svg{width:100%;height:100%;display:block}
+.bft{background:#ff6b00;color:#fff;margin:0 -16px;padding:9px;font-size:.76rem;font-weight:500}
+@media print{body *{visibility:hidden}.bag,.bag *{visibility:visible}.bag{position:absolute;left:0;top:0;width:90mm;margin:0;background:none;box-shadow:none;padding:0}.bag::before,.bag::after,.zip{display:none}.btag{border:2px dashed #999}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="app" id="login" style="max-width:420px" hidden>
+  <h1 style="font-size:1.4rem">Admin sign in</h1>
+  <div class="card" style="padding:18px"><form id="lf" style="grid-template-columns:1fr">
+    <div><label for="le">Email</label><input id="le" type="email" autocomplete="username" required></div>
+    <div><label for="lp">Password</label><input id="lp" type="password" autocomplete="current-password" required></div>
+    <p id="lerr" style="color:#d33;font-size:.9rem;margin:0" aria-live="polite"></p>
+    <div><button class="btn" type="submit">Sign in</button></div>
+  </form></div>
+</div>
+<div class="app" id="adminapp" hidden>
+  <div class="top">
+    <div class="logo" style="display:flex;align-items:center;gap:10px"><svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#ff6b00"/><path d="M28 20c0-7 16-7 16 0" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><rect x="22" y="20" width="28" height="9" rx="4" fill="#fff"/><rect x="22" y="31" width="28" height="9" rx="4" fill="#fff" opacity=".85"/><rect x="22" y="42" width="28" height="9" rx="4" fill="#fff" opacity=".7"/><path d="M6 27h10M4 36h12M8 45h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg><div>Lunch <span>EXPRESS</span> · Admin</div></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-v="today" aria-selected="true">Today</button>
+      <button class="tab" role="tab" data-v="cust" aria-selected="false">Customers</button>
+      <button class="tab" role="tab" data-v="live" aria-selected="false">Live riders</button>
+      <button class="tab" role="tab" data-v="enq" aria-selected="false" id="enqtab">Enquiries</button>
+      <button class="tab" role="tab" data-v="bag" aria-selected="false">Bag tags</button>
+    </div>
+    <button class="btn link" id="so" type="button">Sign out</button>
+  </div>
+  <div class="stats" id="stats"></div>
+
+  <section id="v-today">
+    <h2 class="h">Today’s deliveries</h2>
+    <div class="card"><table>
+      <thead><tr><th>Child</th><th>School</th><th>Pickup</th><th>Rider</th><th>Status</th></tr></thead>
+      <tbody id="orders"></tbody>
+    </table></div>
+  </section>
+
+  <section id="v-cust" hidden>
+    <h2 class="h">Riders</h2>
+    <div class="card"><table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Vehicle</th><th>Status</th><th></th></tr></thead>
+      <tbody id="rdr"></tbody>
+    </table></div>
+    <h2 class="h">Add customer</h2>
+    <div class="card">
+      <form id="add">
+        <div><label for="fn">Child’s name</label><input id="fn" required></div>
+        <div><label for="fs">School</label><input id="fs" required></div>
+        <div><label for="fc">Class and section</label><input id="fc" placeholder="e.g. 4-B"></div>
+        <div><label for="fa">Address</label><input id="fa" required></div>
+        <div><label for="fp">Parent phone</label><input id="fp" inputmode="tel" required></div>
+        <div><label for="fl">Plan</label><select id="fl"><option value="m">Monthly · ₹699</option><option value="q">3 Months · ₹1,799</option><option value="h">6 Months · ₹3,299</option></select></div>
+        <div style="align-self:end"><button class="btn" type="submit">Add customer</button></div>
+      </form>
+    </div>
+    <h2 class="h">All customers</h2>
+    <div class="card"><table>
+      <thead><tr><th>Child</th><th>Plan</th><th>Ends</th><th>Bag charge</th><th>Phone</th><th></th></tr></thead>
+      <tbody id="custs"></tbody>
+    </table></div>
+  </section>
+<section id="v-enq" hidden>
+    <h2 class="h">Enquiries from the website</h2>
+    <p class="demo">Every question or free-trial request sent from your website appears here instantly.</p>
+    <div id="enqlist"></div>
+  </section>
+<section id="v-live" hidden>
+    <h2 class="h">Live rider map</h2>
+    <p class="demo">Riders appear here while they are online in the rider app.</p>
+    <div class="card" id="livemap" style="padding:12px"></div>
+    <div id="riderlist"></div>
+  </section>
+<section id="v-bag" hidden>
+    <h2 class="h">Bag tag designer</h2>
+    <div class="bw">
+      <div class="card" style="padding:18px">
+        <form onsubmit="return false" style="grid-template-columns:1fr">
+          <div><label for="bn">Customer number</label><input id="bn" type="number" min="1" value="1"></div>
+          <div><label for="bk">Child’s name</label><input id="bk" value="Aarav Singh" autocomplete="off"></div>
+          <div><label for="bc">Class and section</label><input id="bc" value="4-B" autocomplete="off"></div>
+          <div><label for="bs">School</label><input id="bs" value="St. Xavier’s School" autocomplete="off"></div>
+        </form>
+        <p style="font-size:.9rem;color:var(--muted)">Bag code: <b id="bcode" style="color:var(--brand)"></b></p>
+        <button class="btn" id="bpr" type="button" style="margin:10px 0">Print tag</button>
+        <p style="font-size:.82rem;color:var(--muted)">Tip: use Print tag from the Customers tab to fill this in automatically. The QR holds only the bag code, never an address or phone number.</p>
+      </div>
+      <div>
+        <div class="bag"><div class="zip"></div>
+          <div class="btag">
+            <div class="bb"><svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#ff6b00"/><path d="M28 20c0-7 16-7 16 0" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><rect x="22" y="20" width="28" height="9" rx="4" fill="#fff"/><rect x="22" y="31" width="28" height="9" rx="4" fill="#fff" opacity=".85"/><rect x="22" y="42" width="28" height="9" rx="4" fill="#fff" opacity=".7"/><path d="M6 27h10M4 36h12M8 45h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Lunch <span>EXPRESS</span></div>
+            <div class="bkid" id="bpk"></div>
+            <div style="font-weight:600" id="bpc"></div><div style="color:#6f6154;font-size:.88rem" id="bps"></div>
+            <div class="bqr" id="bqr" role="img" aria-label="QR code for this bag"></div>
+            <div style="font-weight:700;letter-spacing:.08em;margin-bottom:12px" id="bpt"></div>
+            <div class="bft">Warm tiffin. On time. Every day. · +91 91375 12257</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyCdMzW6-10OrWo3f5hhLJThJNPThxak4Sc",authDomain:"lunch-express-09.firebaseapp.com",projectId:"lunch-express-09",storageBucket:"lunch-express-09.firebasestorage.app",messagingSenderId:"724032920759",appId:"1:724032920759:web:a928a79479669815b64132"};
+const app=initializeApp(firebaseConfig,"admin"),db=getFirestore(app),auth=getAuth(app);
+const ADMIN="rajchauhanwork09@gmail.com";
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let RIDERS=[],RD=[];
+const PL={m:["Monthly",699,30],q:["3 Months",1799,90],h:["6 Months",3299,180]};
+const day=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+let C=[],ST={},LOC={},PAR={},LEADS=[];
+const cd=id=>doc(db,"customers",String(id)),sd=id=>doc(db,"status",String(id));
+const fail=e=>alert("Could not save: "+(e&&e.message||e));
+const stOf=c=>PAR[c.id]&&PAR[c.id].skipDate===day(0)?"Skipped":ST[c.id]&&ST[c.id].stDate===day(0)?ST[c.id].st:"Not started";
+const $=id=>document.getElementById(id);
+const save=()=>{};
+const active=c=>c.end>=day(0);
+const tagOf=c=>"LX-"+String(c.id).padStart(4,"0");
+const fmt=d=>new Date(d).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+const cls=s=>s==="Delivered"?"ok":s==="Not started"?"":"warn";
+function draw(){
+  const A=C.filter(active),dl=A.filter(c=>stOf(c)==="Delivered").length;
+  const un=A.filter(c=>!c.rider).length,exp=C.filter(c=>active(c)&&c.end<=day(7)).length;
+  const rev=C.reduce((s,c)=>s+PL[c.plan][1],0);
+  $("stats").innerHTML=[[A.length,"Active customers"],[dl+"/"+A.length,"Delivered today"],[un,"Need a rider"],[exp,"Plans ending in 7 days"],[C.filter(c=>!c.bag).length,"Bag charges due"],["₹"+rev.toLocaleString("en-IN"),"Plan value, all customers"]].map(([b,s])=>`<div class="stat"><b>${b}</b><small>${s}</small></div>`).join("");
+  $("orders").innerHTML=A.length?A.map(c=>`<tr><td><b>${c.child}</b></td><td>${c.school}</td><td>${c.addr}</td>
+   <td><select data-id="${c.id}" aria-label="Rider for ${c.child}"><option value="">Assign rider</option>${RIDERS.map(r=>`<option${c.rider===r?" selected":""}>${r}</option>`).join("")}</select></td>
+   <td><span class="pill ${cls(stOf(c))}">${stOf(c)}</span></td></tr>`).join(""):`<tr><td colspan="5">No active customers yet. Add one in the Customers tab.</td></tr>`;
+  document.querySelectorAll("#orders select").forEach(s=>s.onchange=()=>updateDoc(cd(s.dataset.id),{rider:s.value}).catch(fail));
+  $("custs").innerHTML=C.map(c=>`<tr><td><b>${c.child}</b><br><small style="color:var(--muted)">${c.school} · ${tagOf(c)}</small></td><td>${PL[c.plan][0]}</td>
+   <td><span class="pill ${!active(c)?"warn":c.end<=day(7)?"brand":"ok"}">${!active(c)?"Expired":fmt(c.end)}</span></td>
+   <td><span class="pill ${c.bag?"ok":"warn"}">${c.bag?"Paid":"Due"}</span></td>
+   <td><a href="tel:${c.phone}" style="color:var(--brand)">${c.phone}</a></td>
+   <td><button class="btn link" data-t="${c.id}">Print tag</button><button class="btn link" data-b="${c.id}">${c.bag?"Undo bag":"Bag paid"}</button><button class="btn link" data-r="${c.id}">Renew</button><button class="btn link" data-x="${c.id}">Remove</button></td></tr>`).join("");
+  document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{const c=C.find(c=>c.id==b.dataset.r);const base=active(c)?c.end:day(0);const d=new Date(base);d.setDate(d.getDate()+PL[c.plan][2]);updateDoc(cd(c.id),{end:d.toISOString().slice(0,10)}).catch(fail)});
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const c=C.find(c=>c.id==b.dataset.t);$("bn").value=c.id;$("bk").value=c.child;$("bc").value=c.cls||"";$("bs").value=c.school;tab("bag")});
+  document.querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{const c=C.find(c=>c.id==b.dataset.b);updateDoc(cd(c.id),{bag:!c.bag}).catch(fail)});
+  document.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{const c=C.find(c=>c.id==b.dataset.x);if(!confirm("Remove "+c.child+"?"))return;Promise.all([deleteDoc(cd(c.id)),deleteDoc(sd(c.id)),deleteDoc(doc(db,"parents",String(c.id)))]).catch(fail)});
+  drawRiders();drawLeads();
+}
+const SCH={"St. Xavier’s School":[28.5690,77.3560],"Gyan Bharti Public School":[28.5850,77.3440]}; // add every school here (latitude, longitude)
+function drawRiders(){
+  $("rdr").innerHTML=RD.length?RD.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${esc(r.phone)}</td><td>${esc(r.vt)} · ${esc(r.vn)}</td><td><span class="pill ${r.approved?"ok":"warn"}">${r.approved?"Approved":"Waiting"}</span></td><td>${r.approved?"":`<button class="btn link" data-ra="${r.uid}">Approve</button>`}<button class="btn link" data-rx="${r.uid}">Remove</button></td></tr>`).join(""):`<tr><td colspan="5">No riders yet. Riders sign up in the rider app, then you approve them here.</td></tr>`;
+  document.querySelectorAll("[data-ra]").forEach(b=>b.onclick=()=>updateDoc(doc(db,"riders",b.dataset.ra),{approved:true}).catch(fail));
+  document.querySelectorAll("[data-rx]").forEach(b=>b.onclick=()=>{if(confirm("Remove this rider?"))deleteDoc(doc(db,"riders",b.dataset.rx)).catch(fail)});
+}
+function drawLeads(){
+  const nw=LEADS.filter(l=>!l.done).length;
+  $("enqtab").textContent="Enquiries"+(nw?" ("+nw+")":"");
+  const when=l=>l.at&&l.at.toDate?l.at.toDate().toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"just now";
+  $("enqlist").innerHTML=LEADS.length?LEADS.map(l=>`<div class="rc" style="align-items:flex-start;gap:12px;${l.done?"opacity:.6":""}"><div><b>${esc(l.child)}</b> <span class="pill ${l.done?"ok":"brand"}">${l.done?"Done":"New"}</span><small>${esc(l.school)} · ${esc(l.area)}</small>${l.msg?`<small style="color:var(--ink)">“${esc(l.msg)}”</small>`:""}<small>${when(l)} · <a href="tel:${esc(l.phone)}" style="color:var(--brand)">${esc(l.phone)}</a></small></div><div style="display:flex;flex-direction:column;align-items:flex-end"><a class="btn link" style="color:var(--brand)" target="_blank" rel="noopener" href="https://wa.me/91${esc(String(l.phone).replace(/\D/g,"").slice(-10))}">WhatsApp</a><button class="btn link" data-ld="${l.id}">${l.done?"Mark new":"Mark done"}</button><button class="btn link" data-lx="${l.id}">Delete</button></div></div>`).join(""):`<div class="rc"><small>No enquiries yet.</small></div>`;
+  document.querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>{const l=LEADS.find(x=>x.id===b.dataset.ld);updateDoc(doc(db,"leads",l.id),{done:!l.done}).catch(fail)});
+  document.querySelectorAll("[data-lx]").forEach(b=>b.onclick=()=>{if(confirm("Delete this enquiry?"))deleteDoc(doc(db,"leads",b.dataset.lx)).catch(fail)});
+}
+function getRiders(){
+  return Object.values(LOC).filter(l=>Date.now()-l.t<10*60000).map(l=>{
+    const mine=C.filter(c=>c.rider===l.rider&&active(c)),dn=mine.filter(c=>stOf(c)==="Delivered").length;
+    return {name:l.rider,c:[l.lat,l.lng],t:l.t,done:dn+" of "+mine.length+" delivered"}});
+}
+function drawLive(){
+  const R=getRiders(),AC=C.filter(active);
+  const P=AC.map(c=>PAR[c.id]).filter(p=>p&&p.lat!=null).map(p=>[p.lat,p.lng]);
+  const Dd=[...new Set(AC.map(c=>c.school))].map(s=>SCH[s]).filter(Boolean);
+  const S=[...P,...Dd,...R.map(r=>r.c)];
+  if(!R.length){$("livemap").innerHTML='<p style="padding:8px;color:var(--muted)">No riders are online right now.</p>';$("riderlist").innerHTML="";return}
+  const W=340,H=380,m=30,pad=.006;
+  const a0=Math.min(...S.map(s=>s[0]))-pad,a1=Math.max(...S.map(s=>s[0]))+pad,o0=Math.min(...S.map(s=>s[1]))-pad,o1=Math.max(...S.map(s=>s[1]))+pad;
+  const xy=c=>[m+(c[1]-o0)/(o1-o0)*(W-2*m),H-m-(c[0]-a0)/(a1-a0)*(H-2*m)];
+  let g="";for(let i=1;i<6;i++){g+=`<line x1="${i*W/6}" y1="0" x2="${i*W/6}" y2="${H}" stroke="var(--line)"/><line x1="0" y1="${i*H/6}" x2="${W}" y2="${i*H/6}" stroke="var(--line)"/>`}
+  const p=P.map(c=>{const[x,y]=xy(c);return `<circle cx="${x}" cy="${y}" r="7" fill="#ff6b00" stroke="#fff" stroke-width="2"/>`}).join("");
+  const d=Dd.map(c=>{const[x,y]=xy(c);return `<rect x="${x-9}" y="${y-9}" width="18" height="18" rx="5" fill="#1f8a4c" stroke="#fff" stroke-width="2"/>`}).join("");
+  const r=R.map(q=>{const[x,y]=xy(q.c);return `<circle cx="${x}" cy="${y}" r="12" fill="#2563eb" stroke="#fff" stroke-width="3"/><text x="${x}" y="${y-18}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)" stroke="var(--surface)" stroke-width="4" paint-order="stroke">${esc(q.name)}</text>`}).join("");
+  $("livemap").innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="Live positions of riders">${g}${p}${d}${r}</svg><div class="leg"><span><i style="background:#2563eb;border-radius:50%"></i>Rider</span><span><i style="background:#ff6b00;border-radius:50%"></i>Pickup</span><span><i style="background:#1f8a4c;border-radius:3px"></i>School</span></div>`;
+  $("riderlist").innerHTML=R.map(q=>`<div class="rc"><div><b>${esc(q.name)}</b><small>${q.done} · updated ${Math.max(0,Math.round((Date.now()-q.t)/1000))} sec ago</small><small>${q.c[0].toFixed(5)}, ${q.c[1].toFixed(5)}</small></div><a class="btn link" style="color:var(--brand)" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q.c[0]},${q.c[1]}">Open in Google Maps</a></div>`).join("");
+}
+setInterval(()=>{if(!$("v-live").hidden)drawLive()},5000);
+function drawBag(){
+  const n=Math.max(1,parseInt($("bn").value)||1),t="LX-"+String(n).padStart(4,"0");
+  $("bpk").textContent=$("bk").value.trim()||"Child’s name";$("bpc").textContent=$("bc").value.trim();$("bps").textContent=$("bs").value.trim();
+  $("bpt").textContent=t;$("bcode").textContent=t;
+  try{const q=qrcode(0,"M");q.addData(t);q.make();$("bqr").innerHTML=q.createSvgTag({cellSize:4,margin:0,scalable:true})}
+  catch(e){$("bqr").textContent="QR could not load. Check your internet connection."}
+}
+["bn","bk","bc","bs"].forEach(i=>$(i).addEventListener("input",drawBag));
+$("bpr").onclick=()=>window.print();
+drawBag();
+$("add").onsubmit=e=>{e.preventDefault();
+  const p=$("fl").value,d=new Date();d.setDate(d.getDate()+PL[p][2]);
+  const nid=Math.max(0,...C.map(c=>c.id))+1,ph=$("fp").value.trim(),nc={id:nid,child:$("fn").value.trim(),school:$("fs").value.trim(),cls:$("fc").value.trim(),addr:$("fa").value.trim(),phone:ph,plan:p,end:d.toISOString().slice(0,10),rider:"",bag:false};
+  Promise.all([setDoc(cd(nid),nc),setDoc(sd(nid),{p4:ph.replace(/\D/g,"").slice(-4)},{merge:true})]).then(()=>{e.target.reset();tab("today")}).catch(fail)};
+function tab(v){["today","cust","live","enq","bag"].forEach(k=>$("v-"+k).hidden=k!==v);if(v==="live")drawLive();if(v==="bag")drawBag();document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.v===v))}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>tab(t.dataset.v));
+draw();
+let started=false,stR=false;
+const er=e=>console.error(e);
+function start(){
+  onSnapshot(collection(db,"customers"),s=>{C=s.docs.map(d=>d.data()).sort((x,y)=>x.id-y.id);draw();syncP4()},er);
+  onSnapshot(collection(db,"status"),s=>{ST={};s.docs.forEach(d=>ST[d.id]=d.data());stR=true;draw();syncP4()},er);
+  onSnapshot(collection(db,"parents"),s=>{PAR={};s.docs.forEach(d=>PAR[d.id]=d.data());draw()},er);
+  onSnapshot(collection(db,"riders"),s=>{RD=s.docs.map(d=>({uid:d.id,...d.data()}));RIDERS=RD.filter(r=>r.approved).map(r=>r.name);draw()},er);
+  onSnapshot(collection(db,"locations"),s=>{LOC={};s.docs.forEach(d=>LOC[d.id]=d.data());if(!$("v-live").hidden)drawLive()},er);
+  onSnapshot(query(collection(db,"leads"),orderBy("at","desc")),s=>{LEADS=s.docs.map(d=>({id:d.id,...d.data()}));drawLeads()},er);
+}
+function syncP4(){ // lets parents link their bag code to their phone number
+  if(!stR)return;
+  C.forEach(c=>{if(!(ST[c.id]&&ST[c.id].p4)&&c.phone)setDoc(sd(c.id),{p4:String(c.phone).replace(/\D/g,"").slice(-4)},{merge:true}).catch(er)});
+}
+onAuthStateChanged(auth,u=>{
+  if(u&&u.email===ADMIN){$("login").hidden=true;$("adminapp").hidden=false;if(!started){started=true;start()}}
+  else{$("adminapp").hidden=true;$("login").hidden=false;if(u)signOut(auth)}
+});
+$("lf").onsubmit=async e=>{e.preventDefault();$("lerr").textContent="";
+  try{await signInWithEmailAndPassword(auth,$("le").value.trim(),$("lp").value)}catch(x){$("lerr").textContent="Wrong email or password."}};
+$("so").onclick=()=>signOut(auth).then(()=>location.reload());
+</script>
+</body>
+</html>

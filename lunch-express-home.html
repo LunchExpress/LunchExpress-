@@ -38,7 +38,7 @@ h1{font-size:clamp(2rem,4.6vw,3.3rem);line-height:1.15;font-weight:700;letter-sp
 .book{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 20px 50px rgba(120,60,0,.1)}
 .book h2{font-size:1.25rem;line-height:1.3}.book p{color:var(--muted);font-size:.9rem;margin:4px 0 8px}
 label{display:block;font-weight:500;font-size:.88rem;margin:14px 0 5px}
-input{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea,input{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
 .book .btn{width:100%;margin-top:20px}
 .fine{font-size:.8rem;color:var(--muted);margin-top:10px;text-align:center}
 /* sections */
@@ -121,6 +121,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <label for="sc">School and class</label><input id="sc" required placeholder="e.g. St. Xavier’s, 4-B">
     <label for="ar">Pickup locality</label><input id="ar" required autocomplete="off">
     <label for="ph">Your phone number</label><input id="ph" inputmode="tel" required autocomplete="tel">
+    <label for="qm">Your question (optional)</label><textarea id="qm" rows="3" maxlength="400" placeholder="e.g. Do you cover Sector 27?"></textarea>
     <button class="btn" type="submit">Send on WhatsApp</button>
     <p class="fine">This opens WhatsApp with your details filled in.</p>
   </form>
@@ -213,8 +214,8 @@ const db=getFirestore(initializeApp(firebaseConfig));
 document.getElementById("bk").addEventListener("submit",function(e){
   e.preventDefault();
   var v=function(i){return document.getElementById(i).value.trim()};
-  var t="Hi Lunch EXPRESS! I want a free trial.\nChild: "+v("cn")+"\nSchool and class: "+v("sc")+"\nPickup locality: "+v("ar")+"\nPhone: "+v("ph");
-  try{addDoc(collection(db,"leads"),{child:v("cn"),school:v("sc"),area:v("ar"),phone:v("ph"),at:serverTimestamp()}).catch(function(){})}catch(x){}
+  var t="Hi Lunch EXPRESS! I want a free trial.\nChild: "+v("cn")+"\nSchool and class: "+v("sc")+"\nPickup locality: "+v("ar")+"\nPhone: "+v("ph")+(v("qm")?"\nQuestion: "+v("qm"):"");
+  try{addDoc(collection(db,"leads"),{child:v("cn"),school:v("sc"),area:v("ar"),phone:v("ph"),msg:v("qm"),at:serverTimestamp()}).catch(function(){})}catch(x){}
   window.open("https://wa.me/919137512257?text="+encodeURIComponent(t),"_blank","noopener");
 });
 </script>
